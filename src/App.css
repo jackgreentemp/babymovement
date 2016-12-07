@@ -1,0 +1,34 @@
+.App {
+  /*flex-direction: row;
+  flex: 1;*/
+  display: flex;
+}
+
+.week-header {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.border {
+  border: 1px solid #74befe;
+}
+
+.title: {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+}
+
+.week-header-number: {
+  flex: 1;
+  height: 40px;
+}
+
+.display-flex: {
+  display: flex;
+}
+
+.flex-1:{
+  flex: 1;
+}
