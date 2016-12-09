@@ -7,6 +7,7 @@ import {
 const movements = (state = {
   isFetching: false,
   didInvalidate: false,
+  fetchfailure: false,
   items: []
 }, action) => {
   switch (action.type) {
@@ -28,6 +29,11 @@ const movements = (state = {
         didInvalidate: false,
         items: action.movements,
         lastUpdated: action.receivedAt
+      }
+    case FAILURE_MOVEMENTS:
+      return {
+        ...state,
+        fetchfailure: true,
       }
     default:
       return state

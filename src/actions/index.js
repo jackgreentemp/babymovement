@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const REQUEST_MOVEMENTS = 'REQUEST_MOVEMENTS'
 export const RECEIVE_MOVEMENTS = 'RECEIVE_MOVEMENTS'
 export const FAILURE_MOVEMENTS = 'RECEIVE_MOVEMENTS'
@@ -21,6 +23,9 @@ const API_ROOT = "http://www.vrapps.cn:18080/pregnancy_yjy/patientTask/queryPati
 
 const fetchMovements = routeQuery => dispatch => {
   const fullurl = API_ROOT + "patientId="+routeQuery.patientId+"&taskname="+routeQuery.taskname+"&db_optime_after="+routeQuery.db_optime_after+"&password="+routeQuery.password+"&userphone="+routeQuery.userphone+"&apptype="+routeQuery.apptype
+  const pregnancyDateString = routeQuery.pregnancyDate;
+  // console.log(pregnancyDateString);
+  // console.log(moment(pregnancyDateString));
   dispatch(requestMovements())
   return fetch(fullurl)
     .then(response => {

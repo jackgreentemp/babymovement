@@ -1,10 +1,17 @@
-import React, { Component } from 'react';
-import '../views/History.css';
+import React, { Component } from 'react'
+import '../views/History.css'
+
 import First from '../components/First'
 import Day from '../components/Day'
+import Failure from '../components/Failure'
+
+import Loading from 'react-loading'
 
 import { connect } from 'react-redux'
 import { fetchMovementsIfNeeded } from '../actions'
+
+const windowHeight = window.innerHeight
+const windowWidth = window.innerWidth
 
 const styles = {
   title: {
@@ -31,6 +38,21 @@ const styles = {
     fontWeight: "bold",
     fontSize: "48px"
   },
+  loading: {
+    height: windowHeight+'px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  failure: {
+    position: 'fixed',
+    width: windowWidth+'px',
+    textAlign: 'center',
+    bottom: 0
+  },
+  displayNone: {
+    display: 'none'
+  }
 };
 
 // const gridWidth = window.innerWidth/3
@@ -47,23 +69,39 @@ class History extends Component {
   }
 
   render() {
-    // console.log(this.state);
+    // console.log(this.props);
     const { gridWidth } = {gridWidth: window.innerWidth/3}
+    const { isFetching, fetchfailure } = this.props
 
     return (
-      <div className="History">
-        <First width={gridWidth}></First>
-        <Day width={gridWidth}></Day>
-        <First width={gridWidth}></First>
-      </div>
+      <div>
+        <div style={fetchfailure?styles.failure:styles.displayNone}>
+          <Failure tips="获取数据失败"/>
+        </div>
+        {isFetching ? 
+          <div style={styles.loading}>
+            <Loading type="bubbles" color="#e3e3e3" /> 
+          </div>
+          :
+          <div className="History">
+            <First width={gridWidth}></First>
+            <Day width={gridWidth}></Day>
+            <First width={gridWidth}></First>
+          </div>
+        }
+      </div>  
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { routing } = state
+  const { routing, movements } = state
+  const { isFetching, items, fetchfailure } = movements
 
   return {
+    isFetching,
+    fetchfailure,
+    items,
     routing
   }
 }
