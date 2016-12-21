@@ -1,16 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import { hsvToRgb } from '../utils/Color';
 
 const styles = {
   main: {
     display: 'flex',
     flexDirection: 'column',
-    border: '1px solid #74befe'
+    minHeight: '120px',
+    border: '1px solid #74befe',
+    boxSizing: 'border-box'
   },
   title: {
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
-    backgroundColor: "#74befe",
+    backgroundColor: "rgb(116, 190, 254)",
   },
   week: {
     paddingTop: "10px",
@@ -35,11 +38,23 @@ const styles = {
 class First extends Component {
   static propTypes = {
     width: PropTypes.number.isRequired,
+    weeknum: PropTypes.number.isRequired,
   }
 
   render() {
-    const { width } = this.props;
+    const { width, weeknum } = this.props;
     styles.main.width = width+"px";
+
+    let h = 208;
+    let s = Number(weeknum)+60;
+    let v = 100;
+    let color = hsvToRgb(h/360, s/100, v/100);
+    // console.log("color = ", color);
+
+    styles.title.backgroundColor = "rgb(" + Math.round(color[0]) + ", " + Math.round(color[1]) + "," + Math.round(color[2]) +")";
+    // console.log("color = ", styles.title.backgroundColor);
+    styles.num.color = "rgb(" + Math.round(color[0]) + ", " + Math.round(color[1]) + "," + Math.round(color[2]) +")";
+
     return (
       <div style={styles.main}>
         <div style={styles.title}>
@@ -47,7 +62,7 @@ class First extends Component {
           <span style={styles.weekLabelEn}>week</span>
         </div>
           <div style={styles.numContainer}>
-            <span style={styles.num}>23</span>
+            <span style={styles.num}>{weeknum}</span>
           </div>
       </div>
     );

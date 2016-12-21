@@ -1,4 +1,5 @@
 import moment from 'moment'
+import _ from 'underscore'
 
 export const REQUEST_MOVEMENTS = 'REQUEST_MOVEMENTS'
 export const RECEIVE_MOVEMENTS = 'RECEIVE_MOVEMENTS'
@@ -11,7 +12,7 @@ export const requestMovements = () => ({
 
 export const receiveMovements = (json) => ({
   type: RECEIVE_MOVEMENTS,
-  movements: json.data,
+  movements: json,
   receivedAt: Date.now()
 })
 
@@ -19,6 +20,7 @@ export const failureMovements = () => ({
   type: FAILURE_MOVEMENTS,
 })
 
+//http://localhost:3000/?patientId=372&taskname=%E8%83%8E%E5%8A%A8&db_optime_after=2014-03-11_12:12:12&password=123456&userphone=13810617185&apptype=android&pregnancyDate=2016-05-01
 const API_ROOT = "http://www.vrapps.cn:18080/pregnancy_yjy/patientTask/queryPatientHisRecordData_byDbOptime.do?"
 
 const fetchMovements = routeQuery => dispatch => {
@@ -34,12 +36,39 @@ const fetchMovements = routeQuery => dispatch => {
       }
       return response.json()
     })
-    .then(json => dispatch(receiveMovements(json)))
+    .then(json => {
+      let itemsArray = [];
+      let itemObj = {};
+      // console.log(JSON.stringify(_.pluck(json.data, 'measureday')))
+      _.each(json.data, function(item){
+        // console.log(_.find(itemsArray, function(tempData){
+        //   return tempData.measureday==item.measureday
+        // }))
+        let existed = _.find(itemsArray, function(tempData){
+          return tempData.measureday==item.measureday
+        })
+
+        if(existed==undefined){
+          // console.log(JSON.parse(item.moreinfo))
+          itemObj = {
+            index: moment(item.measureday).diff(moment(pregnancyDateString), 'days'),
+            measureday: item.measureday,
+            value: [JSON.parse(item.moreinfo).totalnum + "/" + item.taskvalue]
+          }
+          // console.log(itemObj)
+          itemsArray.push(itemObj)
+        } else {
+          existed.value = [...existed.value, JSON.parse(item.moreinfo).totalnum + "/" + item.taskvalue]
+        }
+      })
+      // console.log(itemsArray)
+      dispatch(receiveMovements(itemsArray))
+    })
 }
 
 const shouldFetchMovements = (state) => {
   const movements = state.movements
-  console.log("movements=", movements)
+  // console.log("movements=", movements)
   if (!movements.items.length) {
     return true
   }

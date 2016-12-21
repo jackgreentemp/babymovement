@@ -6,15 +6,18 @@ const styles = {
     flexDirection: 'column',
     border: '1px solid #74befe',
     paddingLeft: '5px',
-    paddingRight: '5px'
+    paddingRight: '5px',
+    minHeight: '120px',
+    boxSizing: 'border-box'
   },
   title: {
     fontSize: "18px",
     fontWeight: "bold",
     color: "#74befe",
+    paddingBottom: '10px'
   },
   date: {
-    fontSize: "18px",
+    paddingTop: '10px'
   },
   labelContainer: {
     fontSize: "18px",
@@ -25,26 +28,34 @@ const styles = {
     paddingBottom: '10px'
   },
   label: {
-    fontSize: "18px"
+    fontSize: "14px",
+    color: "#333333"
+  },
+  commonText: {
+    fontSize: "14px",
+    color: "#666666",
   }
 };
 
 class Day extends Component {
   static propTypes = {
     width: PropTypes.number.isRequired,
+    daynum: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    value: PropTypes.array.isRequired
   }
 
   render() {
-    const { width } = this.props;
+    const { width, daynum, date, value } = this.props;
     styles.main.width = width+"px";
+    if(width < 90)
+      styles.commonText.fontSize = "10px";
     return (
       <div style={styles.main}>
-        <span style={styles.title}>Day 0</span>
-        <span style={styles.date}>2016-09-11</span>
+        {daynum?<span style={styles.title}>Day {daynum}</span>:<span></span>}
+        <span style={styles.commonText}>{date}</span>
         <div style={styles.labelContainer}>
-          <span style={styles.label}>23/8</span>
-          <span style={styles.label}>23/8</span>
-          <span style={styles.label}>23/8</span>
+          {value?value.map(function(data){return <span style={styles.commonText}>{data}</span>}):<span></span>}
         </div>
       </div>
     );
