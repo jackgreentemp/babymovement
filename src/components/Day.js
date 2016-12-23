@@ -55,7 +55,9 @@ class Day extends Component {
         {daynum?<span style={styles.title}>Day {daynum}</span>:<span></span>}
         <span style={styles.commonText}>{date}</span>
         <div style={styles.labelContainer}>
-          {value?value.map(function(data){return <span style={styles.commonText}>{data}</span>}):<span></span>}
+          {value?value.map(function(data, index){
+            return <span key={index} style={styles.commonText}>{data}</span>
+          }):<span></span>}
         </div>
       </div>
     );

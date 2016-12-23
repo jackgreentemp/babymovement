@@ -4,6 +4,8 @@ import routes from '../routes'
 import DevTools from './DevTools'
 import { Router } from 'react-router'
 
+import './Root.css'
+
 const Root = ({ store, history }) => (
   <Provider store={store}>
     <div>

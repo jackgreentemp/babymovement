@@ -15,6 +15,12 @@ import { fetchMovementsIfNeeded } from '../actions'
 
 const windowHeight = window.innerHeight
 const windowWidth = window.innerWidth
+// console.log("window.innerWidth = ", window.innerWidth);
+// console.log("document.body.offsetWidth = ", document.body.offsetWidth);
+// console.log("document.body.clientWidth = ", document.body.clientWidth);
+// console.log("document.body.scrollWidth = ", document.body.scrollWidth);
+// console.log("document.documentElement.clientWidth = ", document.documentElement.clientWidth);
+
 
 const styles = {
   main: {
@@ -107,6 +113,8 @@ class History extends Component {
     if(items.length)
       dataArray = this.initDataArray(routing.locationBeforeTransitions.query.pregnancyDate, items)
 
+    // console.log(dataArray);
+
     return (
       <div>
         <div style={fetchfailure?styles.failure:styles.displayNone}>
@@ -120,11 +128,11 @@ class History extends Component {
           :
           <div style={styles.main}>
             {
-              dataArray.map(function(data){
+              dataArray.map(function(data, index){
                 if(data.type === 1)
-                  return <First width={gridWidth} weeknum={data.weeknum}></First>
+                  return <First key={index} width={gridWidth} weeknum={data.weeknum}></First>
                 if(data.type === 2)
-                  return <Day width={gridWidth} daynum={data.daynum} date={data.date} value={data.value}></Day>
+                  return <Day key={index} width={gridWidth} daynum={data.daynum} date={data.date} value={data.value}></Day>
               })
             }
           </div>
